@@ -1,5 +1,23 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs/promises');
+const { pathToFileURL } = require('url');
+
+ipcMain.handle('list-dir', async (event, dir) => {
+  const pageUrl = pathToFileURL(path.join(__dirname, 'index.html')).href;
+  if (!event.senderFrame || event.senderFrame.parent || event.senderFrame.url !== pageUrl) {
+    throw new Error('Недопустимый источник IPC-запроса.');
+  }
+  if (typeof dir !== 'string' || dir.trim().length === 0) {
+    throw new Error('Путь к каталогу должен быть непустой строкой.');
+  }
+
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  return entries.map(entry => ({
+    name: entry.name,
+    isDir: entry.isDirectory()
+  }));
+});
 
 function createWindow() {
   const win = new BrowserWindow({
