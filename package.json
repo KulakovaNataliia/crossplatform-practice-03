@@ -1,0 +1,14 @@
+{
+  "name": "electron-file-explorer",
+  "version": "1.0.0",
+  "description": "Практическая работа № 3. Файловый проводник Electron, вариант 1.",
+  "main": "main.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Кулакова Наталия Сергеевна",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^44.9.0"
+  }
+}
