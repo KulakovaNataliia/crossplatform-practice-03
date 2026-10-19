@@ -65,3 +65,14 @@ button:disabled {
   opacity: 0.6;
   cursor: wait;
 }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+#directory-path {
+  margin-top: 20px;
+  overflow-wrap: anywhere;
+}

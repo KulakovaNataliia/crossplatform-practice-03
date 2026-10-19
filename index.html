@@ -11,7 +11,11 @@
   <main>
     <h1>Файловый проводник</h1>
     <h2>Кулакова Наталия Сергеевна — ТРПО23-1</h2>
-    <button id="list-directory" type="button">Показать содержимое каталога</button>
+    <div class="actions">
+      <button id="list-directory" type="button">Показать содержимое каталога</button>
+      <button id="select-directory" type="button">Выбрать каталог</button>
+    </div>
+    <p id="directory-path" aria-live="polite">Каталог: .</p>
     <ul id="directory-entries" aria-label="Содержимое каталога"></ul>
   </main>
   <script src="renderer.js"></script>

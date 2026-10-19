@@ -1,13 +1,17 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs/promises');
 const { pathToFileURL } = require('url');
 
-ipcMain.handle('list-dir', async (event, dir) => {
+function validateSender(event) {
   const pageUrl = pathToFileURL(path.join(__dirname, 'index.html')).href;
   if (!event.senderFrame || event.senderFrame.parent || event.senderFrame.url !== pageUrl) {
     throw new Error('Недопустимый источник IPC-запроса.');
   }
+}
+
+ipcMain.handle('list-dir', async (event, dir) => {
+  validateSender(event);
   if (typeof dir !== 'string' || dir.trim().length === 0) {
     throw new Error('Путь к каталогу должен быть непустой строкой.');
   }
@@ -17,6 +21,18 @@ ipcMain.handle('list-dir', async (event, dir) => {
     name: entry.name,
     isDir: entry.isDirectory()
   }));
+});
+
+ipcMain.handle('select-directory', async (event) => {
+  validateSender(event);
+  const win = BrowserWindow.fromWebContents(event.sender);
+  const result = await dialog.showOpenDialog(win, {
+    title: 'Выбрать каталог',
+    buttonLabel: 'Выбрать каталог',
+    properties: ['openDirectory']
+  });
+
+  return result.canceled ? null : (result.filePaths[0] ?? null);
 });
 
 function createWindow() {
